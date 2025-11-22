@@ -113,7 +113,51 @@ describe('testes com funcionarios', () => {
     );
   });
 
-  test('atualizar funcionarios com dados incorretos deve lançar excessão', () => {});
+  test('atualizar funcionarios com dados incorretos deve lançar excessão', () => {
+    const dadoInicial = {
+      id: '',
+      nome: 'Nome completo da Silva',
+      cpf: '80605923000',
+      salarioBruto: '1610.10',
+      descontoDaPrevidencia: '10',
+      numeroDeDependentes: '2',
+    };
+
+    const id = service.cadastrar(dadoInicial);
+    expect(id).toEqual(MOCKED_UUID);
+    dadoInicial.id = id;
+
+    let funcionarioInvalidoNome = { ...dadoInicial, nome: 'abc' };
+    expect(() => service.atualizar(funcionarioInvalidoNome)).toThrow(
+      'Nome muito curto'
+    );
+
+    let funcionarioInvalidoCpf = { ...dadoInicial, cpf: '1234' };
+    expect(() => service.atualizar(funcionarioInvalidoCpf)).toThrow(
+      'Cpf inválido'
+    );
+
+    let funcionarioInvalidoSalario = { ...dadoInicial, salarioBruto: '0' };
+    expect(() => service.atualizar(funcionarioInvalidoSalario)).toThrow(
+      'Salário inválido'
+    );
+
+    let funcionarioInvalidoDesconto = {
+      ...dadoInicial,
+      descontoDaPrevidencia: '-7',
+    };
+    expect(() => service.atualizar(funcionarioInvalidoDesconto)).toThrow(
+      'Desconto da previdência inválido'
+    );
+
+    let funcionarioInvalidoDependentes = {
+      ...dadoInicial,
+      numeroDeDependentes: '-1',
+    };
+    expect(() => service.atualizar(funcionarioInvalidoDependentes)).toThrow(
+      'Número de dependentes inválido'
+    );
+  });
 
   test('deve excluir funcionario corretamente', () => {
     const funcionarioValido = {
@@ -150,14 +194,10 @@ describe('testes com funcionarios', () => {
     expect(localStorage.setItem).toHaveBeenCalled();
     expect(id).toEqual(MOCKED_UUID);
 
-    // O código só lança erro se o id for vazio, não se não existir
-    // Se o id não existir, simplesmente não faz nada
     const idInexistente = 'ID!@#';
     expect(() => service.excluir(idInexistente)).not.toThrow();
 
     // Testa que lança erro se id for vazio
     expect(() => service.excluir('')).toThrow('Id inválido');
   });
-
-  test('dados de irrf deve estar com resultado correto', () => {});
 });
