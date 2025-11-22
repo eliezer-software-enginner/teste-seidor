@@ -200,4 +200,20 @@ describe('testes com funcionarios', () => {
     // Testa que lança erro se id for vazio
     expect(() => service.excluir('')).toThrow('Id inválido');
   });
+
+  test('não deve ser possivel cadstrar funcionário com mesmo cpf', () => {
+    const funcionarioValido = {
+      nome: 'Nome completo da Silva',
+      cpf: '80605923000',
+      salarioBruto: '1610.10',
+      descontoDaPrevidencia: '10',
+      numeroDeDependentes: '2',
+    };
+
+    service.cadastrar(funcionarioValido);
+
+    expect(() => service.cadastrar(funcionarioValido)).toThrow(
+      'Já existe funcionário com este CPF'
+    );
+  });
 });

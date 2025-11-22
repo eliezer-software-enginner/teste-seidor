@@ -1,13 +1,17 @@
-import { v4 as uuidv4 } from 'uuid';
-import { IRRFService } from '../irrfService/IRRFService';
 import type { FuncionarioModel } from './FuncionarioModel';
 import type { FuncionarioViewModel } from './FuncionarioViewModel';
+import { IRRFService } from '../irrfService/IRRFService';
+import { v4 as uuidv4 } from 'uuid';
 
 export class FuncionarioService {
   private KEY = 'funci';
 
   cadastrar(funcionario: Omit<FuncionarioModel, 'id'>): string {
     this.validar(funcionario);
+
+    if (this.buscaPorCpf(funcionario.cpf) != undefined) {
+      throw new Error('Já existe funcionário com este CPF');
+    }
 
     const id = uuidv4();
     const funcionarioComId: FuncionarioModel = {
@@ -50,10 +54,6 @@ export class FuncionarioService {
       const update = this.buscarFuncionarios().filter((it) => it.id != id);
       localStorage.setItem(this.KEY, JSON.stringify(update));
     }
-  }
-
-  buscaPorId(id: string): FuncionarioModel | undefined {
-    return this.buscarFuncionarios().find((it) => it.id == id);
   }
 
   buscarFuncionarios(): FuncionarioModel[] {
@@ -126,5 +126,13 @@ export class FuncionarioService {
     ) {
       throw new Error('Número de dependentes inválido');
     }
+  }
+
+  buscaPorId(id: string): FuncionarioModel | undefined {
+    return this.buscarFuncionarios().find((it) => it.id == id.trim());
+  }
+
+  buscaPorCpf(cpf: string): FuncionarioModel | undefined {
+    return this.buscarFuncionarios().find((it) => it.cpf == cpf.trim());
   }
 }
