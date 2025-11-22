@@ -31,6 +31,7 @@ import {
 import { Button } from '@/components/ui/button';
 import type { FuncionarioViewModel } from '@/services/funcionario/FuncionarioViewModel';
 import { ChevronDown } from 'lucide-react';
+import { Input } from '../ui/input';
 import { getFuncionarioColumns } from './FuncionarioColumnDef';
 
 export function DataTable({
@@ -55,6 +56,8 @@ export function DataTable({
     [handleClickEditar, handleClickExcluir]
   );
 
+  const [globalFilter, setGlobalFilter] = React.useState('');
+
   const table = useReactTable({
     data,
     columns,
@@ -66,29 +69,40 @@ export function DataTable({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
+    },
+    globalFilterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+
+      const nome = row.getValue('nome')?.toString().toLowerCase() ?? '';
+      const cpf = row.getValue('cpf')?.toString().toLowerCase() ?? '';
+
+      const term = filterValue.toLowerCase();
+
+      return nome.includes(term) || cpf.includes(term);
     },
   });
 
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
-        {/* <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
+        <Input
+          placeholder='Buscar por nome...'
+          value={globalFilter}
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
           className='max-w-sm'
-        /> */}
+        />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
-              Columns <ChevronDown />
+              Colunas <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
@@ -155,7 +169,7 @@ export function DataTable({
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  Sem registros
                 </TableCell>
               </TableRow>
             )}
@@ -164,8 +178,7 @@ export function DataTable({
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
         <div className='text-muted-foreground flex-1 text-sm'>
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} de{' '}
         </div>
         <div className='space-x-2'>
           <Button
@@ -174,7 +187,7 @@ export function DataTable({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             variant='outline'
@@ -182,7 +195,7 @@ export function DataTable({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Próximo
           </Button>
         </div>
       </div>

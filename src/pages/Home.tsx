@@ -8,7 +8,9 @@ import {
   FieldSet,
 } from '@/components/ui/field';
 
+import { CurrencyInputMask } from '@/components/CurrencyInputMask';
 import { DataTable } from '@/components/funcionarioTable/FuncionarioTable';
+import { MaskInput } from '@/components/MaskInput';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSessionContext } from '@/contexts/SessionContext';
@@ -50,6 +52,8 @@ export default function Home() {
     try {
       setError(null);
 
+      console.log('Enviando para backend:', funcionarioState.salarioBruto);
+
       if (editMode) editarFuncionario(funcionarioState);
       saveFuncionario(funcionarioState);
     } catch (e: any) {
@@ -84,7 +88,7 @@ export default function Home() {
   return (
     <div className={styles.mainContainer}>
       <FieldSet>
-        <FieldLegend>Cadastro de Funcionários</FieldLegend>
+        <FieldLegend>Cadastro de Funcionário</FieldLegend>
         <FieldDescription>
           This appears on invoices and emails.
         </FieldDescription>
@@ -107,33 +111,42 @@ export default function Home() {
 
           <Field>
             <FieldLabel htmlFor='cpf'>CPF</FieldLabel>
-            <Input
+
+            <MaskInput
+              mask='999.999.999-99'
               id='cpf'
               autoComplete='off'
-              onChange={(ev) => handleChange('cpf', ev.target.value)}
+              onChange={(ev: any) => {
+                // Remove a máscara da string para salvar o valor limpo (somente dígitos)
+                const unmaskedValue = ev.target.value.replace(/[^0-9]/g, '');
+                handleChange('cpf', unmaskedValue);
+              }}
               value={funcionarioState.cpf}
             />
           </Field>
           <Field>
             <FieldLabel htmlFor='salarioBruto'>Salário bruto</FieldLabel>
-            <Input
+            <CurrencyInputMask
               id='salarioBruto'
-              autoComplete='off'
-              onChange={(ev) => handleChange('salarioBruto', ev.target.value)}
               value={funcionarioState.salarioBruto}
+              onValueChange={(value) => {
+                const safeValue = value ?? '';
+                handleChange('salarioBruto', safeValue);
+              }}
             />
           </Field>
           <Field>
             <FieldLabel htmlFor='descontoDaPrevidencia'>
               Desconto da previdência
             </FieldLabel>
-            <Input
+
+            <CurrencyInputMask
               id='descontoDaPrevidencia'
-              autoComplete='off'
-              onChange={(ev) =>
-                handleChange('descontoDaPrevidencia', ev.target.value)
-              }
               value={funcionarioState.descontoDaPrevidencia}
+              onValueChange={(value) => {
+                const safeValue = value ?? '';
+                handleChange('descontoDaPrevidencia', safeValue);
+              }}
             />
           </Field>
           <Field>
@@ -154,6 +167,9 @@ export default function Home() {
           {editMode ? 'Atualizar funcionário' : 'Cadastrar funcionário'}
         </Button>
       </FieldSet>
+
+      <br />
+      <h1>Lista de funcionários</h1>
 
       <DataTable
         data={funcionarios}
