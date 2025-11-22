@@ -1,13 +1,20 @@
+import { v4 as uuidv4 } from 'uuid';
+import { IRRFService } from '../irrfService/IRRFService';
 import type { FuncionarioModel } from './FuncionarioModel';
 import type { FuncionarioViewModel } from './FuncionarioViewModel';
-import { IRRFService } from '../irrfService/IRRFService';
 
 export class FuncionarioService {
   private KEY = 'funci';
 
-  cadastrar(funcionario: FuncionarioModel): void {
+  cadastrar(funcionario: Omit<FuncionarioModel, 'id'>): void {
     this.validar(funcionario);
-    localStorage.setItem(this.KEY, JSON.stringify(funcionario));
+
+    const funcionarioComId: FuncionarioModel = {
+      ...funcionario,
+      id: uuidv4(),
+    };
+
+    localStorage.setItem(this.KEY, JSON.stringify(funcionarioComId));
   }
 
   atualizar(funcionario: FuncionarioModel): void {
@@ -37,7 +44,7 @@ export class FuncionarioService {
     return this.buscarFuncionarios().find((it) => it.id == id);
   }
 
-  buscarFuncionarios(): FuncionarioModel[] {
+  private buscarFuncionarios(): FuncionarioModel[] {
     const data = localStorage.getItem(this.KEY);
     return data ? JSON.parse(data) : [];
   }
