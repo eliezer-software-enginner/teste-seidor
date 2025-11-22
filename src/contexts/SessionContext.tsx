@@ -10,13 +10,14 @@ interface SessionContextInterface {
   saveFuncionario(funcionario: Omit<FuncionarioModel, 'id'>): void;
   editarFuncionario(funcionario: FuncionarioModel): void;
   excluirFuncionario(id: string): void;
+  buscarFuncionario(id: string): FuncionarioModel | undefined;
 }
 
 const SessionContext = createContext<SessionContextInterface | undefined>(
   undefined
 );
 
-export function useAppContext() {
+export function useSessionContext() {
   const context = useContext(SessionContext);
   if (!context) {
     throw new Error('useAppContext must be used within an AppContextProvider');
@@ -38,17 +39,21 @@ export function SessionContextProvider({
 
   function saveFuncionario(funcionario: Omit<FuncionarioModel, 'id'>) {
     funcionarioService.cadastrar(funcionario);
-    reloadListFuncionarios;
+    reloadListFuncionarios();
   }
 
   function editarFuncionario(funcionario: FuncionarioModel) {
     funcionarioService.atualizar(funcionario);
-    reloadListFuncionarios;
+    reloadListFuncionarios();
   }
 
   function excluirFuncionario(id: string) {
     funcionarioService.excluir(id);
-    reloadListFuncionarios;
+    reloadListFuncionarios();
+  }
+
+  function buscarFuncionario(id: string): FuncionarioModel | undefined {
+    return funcionarioService.buscaPorId(id);
   }
 
   function reloadListFuncionarios() {
@@ -62,6 +67,7 @@ export function SessionContextProvider({
         saveFuncionario,
         editarFuncionario,
         excluirFuncionario,
+        buscarFuncionario,
       }}
     >
       {children}

@@ -15,7 +15,12 @@ export class FuncionarioService {
       id: id,
     };
 
-    localStorage.setItem(this.KEY, JSON.stringify(funcionarioComId));
+    const list = this.buscarFuncionarios();
+
+    list.unshift(funcionarioComId);
+    console.log(list);
+
+    localStorage.setItem(this.KEY, JSON.stringify(list));
     return id;
   }
 
@@ -53,6 +58,10 @@ export class FuncionarioService {
 
   buscarFuncionarios(): FuncionarioModel[] {
     const data = localStorage.getItem(this.KEY);
+
+    if (data == null) {
+      return [];
+    }
     return data ? JSON.parse(data) : [];
   }
 
