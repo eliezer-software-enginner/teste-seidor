@@ -1,6 +1,6 @@
 import type { FuncionarioModel } from './FuncionarioModel';
 import type { FuncionarioViewModel } from './FuncionarioViewModel';
-import { IRRFService } from './IRRFService';
+import { IRRFService } from '../irrfService/IRRFService';
 
 export class FuncionarioService {
   private KEY = 'funci';

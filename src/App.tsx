@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { DataTable } from './components/funcionarioTable/FuncionarioTable';
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from './components/ui/field';
+
+import styles from '@/App.module.css'; // Importa o CSS
+import { columns } from './components/funcionarioTable/FuncionarioColumnDef';
+import { Button } from './components/ui/button';
+import { Input } from './components/ui/input';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className={styles.mainContainer}>
+      <FieldSet>
+        <FieldLegend>Cadastro de Funcionários</FieldLegend>
+        <FieldDescription>
+          This appears on invoices and emails.
+        </FieldDescription>
+
+        <FieldGroup className={styles.formGrid}>
+          <Field>
+            <FieldLabel htmlFor='nome'>Nome</FieldLabel>
+            <Input id='nome' autoComplete='off' placeholder='Evil Rabbit' />
+            <FieldDescription>
+              This appears on invoices and emails.
+            </FieldDescription>
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor='cpf'>CPF</FieldLabel>
+            <Input id='cpf' autoComplete='off' />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor='salarioBruto'>Salário bruto</FieldLabel>
+            <Input id='salarioBruto' autoComplete='off' />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor='descontoDaPrevidencia'>
+              Desconto da previdência
+            </FieldLabel>
+            <Input id='descontoDaPrevidencia' autoComplete='off' />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor='numeroDeDependentes'>
+              Número de dependentes
+            </FieldLabel>
+            <Input id='numeroDeDependentes' autoComplete='off' />
+          </Field>
+        </FieldGroup>
+        <Button>Cadastrar funcionário</Button>
+      </FieldSet>
+
+      <DataTable columns={columns} data={[]} />
+    </div>
+  );
 }
 
-export default App
+export default App;
