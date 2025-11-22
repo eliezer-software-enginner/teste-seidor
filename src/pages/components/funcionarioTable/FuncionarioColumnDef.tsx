@@ -1,6 +1,5 @@
 'use client';
 
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,12 +7,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { formatBrlCurrency } from '@/lib/utils';
 import type { FuncionarioViewModel } from '@/services/funcionario/FuncionarioViewModel';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Button } from '../ui/button';
 
 export const columns_: ColumnDef<FuncionarioViewModel>[] = [
   {

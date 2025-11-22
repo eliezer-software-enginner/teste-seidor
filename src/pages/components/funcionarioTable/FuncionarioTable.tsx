@@ -29,12 +29,12 @@ import {
 } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import type { FuncionarioViewModel } from '@/services/funcionario/FuncionarioViewModel';
 import { ChevronDown } from 'lucide-react';
-import { Input } from '../ui/input';
 import { getFuncionarioColumns } from './FuncionarioColumnDef';
 
-export function DataTable({
+export function FuncionarioTable({
   data,
   handleClickEditar,
   handleClickExcluir,
@@ -93,7 +93,7 @@ export function DataTable({
     <div className='w-full'>
       <div className='flex items-center py-4'>
         <Input
-          placeholder='Buscar por nome...'
+          placeholder='Buscar por nome ou cpf'
           value={globalFilter}
           onChange={(event) => table.setGlobalFilter(event.target.value)}
           className='max-w-sm'
@@ -177,9 +177,6 @@ export function DataTable({
         </Table>
       </div>
       <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='text-muted-foreground flex-1 text-sm'>
-          {table.getFilteredSelectedRowModel().rows.length} de{' '}
-        </div>
         <div className='space-x-2'>
           <Button
             variant='outline'
