@@ -7,8 +7,8 @@ import {
   FieldSet,
 } from './components/ui/field';
 
-import styles from '@/App.module.css';
 import { useState } from 'react';
+import styles from './App.module.css';
 import { columns } from './components/funcionarioTable/FuncionarioColumnDef';
 import { DataTable } from './components/funcionarioTable/FuncionarioTable';
 import { Button } from './components/ui/button';

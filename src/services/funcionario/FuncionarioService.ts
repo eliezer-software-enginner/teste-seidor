@@ -6,29 +6,36 @@ import type { FuncionarioViewModel } from './FuncionarioViewModel';
 export class FuncionarioService {
   private KEY = 'funci';
 
-  cadastrar(funcionario: Omit<FuncionarioModel, 'id'>): void {
+  cadastrar(funcionario: Omit<FuncionarioModel, 'id'>): string {
     this.validar(funcionario);
 
+    const id = uuidv4();
     const funcionarioComId: FuncionarioModel = {
       ...funcionario,
-      id: uuidv4(),
+      id: id,
     };
 
     localStorage.setItem(this.KEY, JSON.stringify(funcionarioComId));
+    return id;
   }
 
   atualizar(funcionario: FuncionarioModel): void {
     this.validar(funcionario);
 
-    const busca = this.buscaPorId(funcionario.id);
+    const funcionariosAtuais = this.buscarFuncionarios();
 
-    if (busca) {
-      busca.cpf = funcionario.cpf;
-      busca.descontoDaPrevidencia = funcionario.descontoDaPrevidencia;
-      busca.nome = funcionario.nome;
-      busca.numeroDeDependentes = funcionario.numeroDeDependentes;
-      busca.salarioBruto = funcionario.salarioBruto;
+    const index = funcionariosAtuais.findIndex(
+      (it) => it.id === funcionario.id
+    );
+
+    if (index === -1) {
+      throw new Error('Funcionário não encontrado para atualização.');
     }
+
+    // aqui atualizo diretamente o índice encontrado)
+    funcionariosAtuais[index] = funcionario;
+
+    localStorage.setItem(this.KEY, JSON.stringify(funcionariosAtuais));
   }
 
   excluir(id: string): void {
@@ -44,7 +51,7 @@ export class FuncionarioService {
     return this.buscarFuncionarios().find((it) => it.id == id);
   }
 
-  private buscarFuncionarios(): FuncionarioModel[] {
+  buscarFuncionarios(): FuncionarioModel[] {
     const data = localStorage.getItem(this.KEY);
     return data ? JSON.parse(data) : [];
   }
@@ -88,7 +95,7 @@ export class FuncionarioService {
     if (
       salarioBruto == '' ||
       Number.isNaN(salarioBruto) ||
-      Number.parseFloat(salarioBruto) < 0
+      Number.parseFloat(salarioBruto) <= 0
     ) {
       throw new Error('Salário inválido');
     }
@@ -108,7 +115,7 @@ export class FuncionarioService {
       Number.isNaN(numeroDeDependentes) ||
       Number.parseInt(numeroDeDependentes) < 0
     ) {
-      throw new Error('Desconto da previdência inválido');
+      throw new Error('Número de dependentes inválido');
     }
   }
 }
