@@ -108,9 +108,10 @@ export default function FuncionarioForm({
               id='numeroDeDependentes'
               placeholder='1'
               autoComplete='off'
-              onChange={(ev) =>
-                handleChange('numeroDeDependentes', ev.target.value)
-              }
+              onChange={(ev) => {
+                const unmaskedValue = ev.target.value.replace(/[^0-9]/g, '');
+                handleChange('numeroDeDependentes', unmaskedValue);
+              }}
               value={funcionarioState.numeroDeDependentes}
               required
             />
