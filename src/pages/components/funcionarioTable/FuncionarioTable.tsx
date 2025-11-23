@@ -77,7 +77,7 @@ export function FuncionarioTable({
       rowSelection,
       globalFilter,
     },
-    globalFilterFn: (row, columnId, filterValue) => {
+    globalFilterFn: (row, _columnId, filterValue) => {
       if (!filterValue) return true;
 
       const nome = row.getValue('nome')?.toString().toLowerCase() ?? '';
