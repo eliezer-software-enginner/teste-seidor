@@ -19,7 +19,7 @@ type props = {
   error: string | null;
   handleChange(key: string, value: string): void;
   funcionarioState: FuncionarioModel;
-  handleSaveOrUpdate(): void;
+  handleSaveOrUpdate(event: React.FormEvent<HTMLFormElement>): void;
   editMode: boolean;
 };
 
@@ -31,7 +31,7 @@ export default function FuncionarioForm({
   editMode,
 }: props) {
   return (
-    <>
+    <form onSubmit={handleSaveOrUpdate}>
       <FieldSet>
         <FieldLegend>Cadastro de Funcionário</FieldLegend>
         <FieldDescription>
@@ -48,6 +48,7 @@ export default function FuncionarioForm({
               placeholder='Seu nome completo'
               onChange={(ev) => handleChange('nome', ev.target.value)}
               value={funcionarioState.nome}
+              required
             />
           </Field>
 
@@ -66,6 +67,7 @@ export default function FuncionarioForm({
               }}
               value={funcionarioState.cpf}
               disabled={editMode}
+              required
             />
             <FieldDescription>Deve possuir 11 dígitos</FieldDescription>
           </Field>
@@ -79,6 +81,7 @@ export default function FuncionarioForm({
                 const safeValue = value ?? '';
                 handleChange('salarioBruto', safeValue);
               }}
+              required
             />
           </Field>
           <Field>
@@ -94,6 +97,7 @@ export default function FuncionarioForm({
                 const safeValue = value ?? '';
                 handleChange('descontoDaPrevidencia', safeValue);
               }}
+              required
             />
           </Field>
           <Field>
@@ -108,13 +112,14 @@ export default function FuncionarioForm({
                 handleChange('numeroDeDependentes', ev.target.value)
               }
               value={funcionarioState.numeroDeDependentes}
+              required
             />
           </Field>
         </FieldGroup>
-        <Button onClick={handleSaveOrUpdate}>
+        <Button type='submit'>
           {editMode ? 'Atualizar funcionário' : 'Cadastrar funcionário'}
         </Button>
       </FieldSet>
-    </>
+    </form>
   );
 }

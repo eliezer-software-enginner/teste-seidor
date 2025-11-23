@@ -36,8 +36,9 @@ export default function Home() {
     });
   }
 
-  function handleSaveOrUpdate() {
+  function handleSaveOrUpdate(event: React.FormEvent<HTMLFormElement>) {
     try {
+      event.preventDefault();
       setError(null);
 
       funcionarioState.salarioBruto = funcionarioState.salarioBruto.replace(
