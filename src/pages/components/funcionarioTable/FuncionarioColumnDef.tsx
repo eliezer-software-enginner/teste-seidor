@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { formatBrlCurrency } from '@/lib/utils';
@@ -121,12 +121,14 @@ export const getFuncionarioColumns = (
 
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleClickEditar(funcionario.id)}>
+              <Pencil className='mr-2 h-4 w-4' />
               Editar
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleClickExcluir(funcionario.id)}
               className='text-red-600'
             >
+              <Trash className='mr-2 h-4 w-4 text-red-600' />
               Excluir
             </DropdownMenuItem>
           </DropdownMenuContent>

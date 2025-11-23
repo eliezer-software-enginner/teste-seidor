@@ -31,7 +31,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { FuncionarioViewModel } from '@/services/funcionario/FuncionarioViewModel';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Search } from 'lucide-react';
 import { getFuncionarioColumns } from './FuncionarioColumnDef';
 
 export function FuncionarioTable({
@@ -92,12 +92,15 @@ export function FuncionarioTable({
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
-        <Input
-          placeholder='Buscar por nome ou cpf'
-          value={globalFilter}
-          onChange={(event) => table.setGlobalFilter(event.target.value)}
-          className='max-w-sm'
-        />
+        <div className='relative w-full max-w-sm'>
+          <Search className='absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+          <Input
+            placeholder='Buscar por nome ou cpf'
+            value={globalFilter}
+            onChange={(event) => table.setGlobalFilter(event.target.value)}
+            className='max-w-sm pl-8'
+          />
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

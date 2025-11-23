@@ -1,18 +1,19 @@
-import FuncionarioForm from './components/funcionarioForm/FuncionarioForm';
+import { useSessionContext } from '@/contexts/SessionContext';
 import type { FuncionarioModel } from '@/services/funcionario/FuncionarioModel';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import FuncionarioForm from './components/funcionarioForm/FuncionarioForm';
 import { FuncionarioTable } from './components/funcionarioTable/FuncionarioTable';
 import styles from './Home.module.css';
-import { useSessionContext } from '@/contexts/SessionContext';
-import { useState } from 'react';
 
 export default function Home() {
   const initialState: FuncionarioModel = {
     id: '',
-    nome: 'Nome completo da Silva',
-    cpf: '80605923000',
-    salarioBruto: '1610.10',
-    descontoDaPrevidencia: '10',
-    numeroDeDependentes: '2',
+    nome: '',
+    cpf: '',
+    salarioBruto: '',
+    descontoDaPrevidencia: '',
+    numeroDeDependentes: '',
   };
 
   const [funcionarioState, setFuncionarioState] =
@@ -39,16 +40,30 @@ export default function Home() {
     try {
       setError(null);
 
-      console.log('Enviando para backend:', funcionarioState.salarioBruto);
+      funcionarioState.salarioBruto = funcionarioState.salarioBruto.replace(
+        ',',
+        '.'
+      );
 
-      if (editMode) editarFuncionario(funcionarioState);
-      saveFuncionario(funcionarioState);
+      funcionarioState.descontoDaPrevidencia =
+        funcionarioState.descontoDaPrevidencia.replace(',', '.');
+
+      if (editMode) {
+        editarFuncionario(funcionarioState);
+        toast.success('Funcionário atualizado com sucesso');
+        setEditMode(false);
+      } else {
+        saveFuncionario(funcionarioState);
+        toast.success('Funcionário cadastrado com sucesso');
+      }
+      setFuncionarioState(initialState);
     } catch (e: any) {
       setError(e.message);
     }
   }
 
   function handleClickEditar(id: string) {
+    setError(null);
     const funcionario = buscarFuncionario(id);
 
     if (funcionario) {
@@ -58,6 +73,7 @@ export default function Home() {
   }
 
   function handleClickExcluir(id: string) {
+    setError(null);
     const isConfirmed = window.confirm(
       `Tem certeza que deseja excluir o funcionário com ID: ${id}? Esta ação não pode ser desfeita.`
     );
@@ -65,7 +81,7 @@ export default function Home() {
     if (isConfirmed) {
       try {
         excluirFuncionario(id);
-        alert(`Funcionário com ID ${id} excluído com sucesso!`);
+        toast.success(`Funcionário com ID ${id} excluído com sucesso!`);
       } catch (error) {
         setError(`Erro ao excluir funcionário: ${(error as Error).message}`);
       }
@@ -74,13 +90,23 @@ export default function Home() {
 
   return (
     <div className={styles.mainContainer}>
-      <FuncionarioForm
-        editMode={editMode}
-        error={error}
-        funcionarioState={funcionarioState}
-        handleChange={handleChange}
-        handleSaveOrUpdate={handleSaveOrUpdate}
-      />
+      <div
+        style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '8px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <FuncionarioForm
+          editMode={editMode}
+          error={error}
+          funcionarioState={funcionarioState}
+          handleChange={handleChange}
+          handleSaveOrUpdate={handleSaveOrUpdate}
+        />
+      </div>
+
       <br />
       <h1>Lista de funcionários</h1>
 

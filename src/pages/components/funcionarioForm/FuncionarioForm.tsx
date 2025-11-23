@@ -35,7 +35,7 @@ export default function FuncionarioForm({
       <FieldSet>
         <FieldLegend>Cadastro de Funcionário</FieldLegend>
         <FieldDescription>
-          This appears on invoices and emails.
+          Bem vindo(a) a central de cadastro de funcionários
         </FieldDescription>
         {error != null && <FieldError>{error}</FieldError>}
 
@@ -45,13 +45,10 @@ export default function FuncionarioForm({
             <Input
               id='nome'
               autoComplete='off'
-              placeholder='Evil Rabbit'
+              placeholder='Seu nome completo'
               onChange={(ev) => handleChange('nome', ev.target.value)}
               value={funcionarioState.nome}
             />
-            <FieldDescription>
-              This appears on invoices and emails.
-            </FieldDescription>
           </Field>
 
           <Field>
@@ -61,18 +58,22 @@ export default function FuncionarioForm({
               mask='999.999.999-99'
               id='cpf'
               autoComplete='off'
+              placeholder='Informe seu cpf'
               onChange={(ev: any) => {
                 // Remove a máscara da string para salvar o valor limpo (somente dígitos)
                 const unmaskedValue = ev.target.value.replace(/[^0-9]/g, '');
                 handleChange('cpf', unmaskedValue);
               }}
               value={funcionarioState.cpf}
+              disabled={editMode}
             />
+            <FieldDescription>Deve possuir 11 dígitos</FieldDescription>
           </Field>
           <Field>
             <FieldLabel htmlFor='salarioBruto'>Salário bruto</FieldLabel>
             <CurrencyInputMask
               id='salarioBruto'
+              placeholder='R$ 0,00'
               value={funcionarioState.salarioBruto}
               onValueChange={(value) => {
                 const safeValue = value ?? '';
@@ -87,6 +88,7 @@ export default function FuncionarioForm({
 
             <CurrencyInputMask
               id='descontoDaPrevidencia'
+              placeholder='R$ 0,00'
               value={funcionarioState.descontoDaPrevidencia}
               onValueChange={(value) => {
                 const safeValue = value ?? '';
@@ -100,6 +102,7 @@ export default function FuncionarioForm({
             </FieldLabel>
             <Input
               id='numeroDeDependentes'
+              placeholder='1'
               autoComplete='off'
               onChange={(ev) =>
                 handleChange('numeroDeDependentes', ev.target.value)
