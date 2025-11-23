@@ -1,5 +1,3 @@
-Bem vindo ao teste.
-
 Eu desenvolvi o site com cobertura de testes, validações e com garantia de qualidade e boa experiência para o usuário.
 
 O site está disponível online para você poder testar
@@ -22,7 +20,7 @@ Resultado esperado:
 
 ## Dado 2:
 
-- Nome:
+- Nome: Teste 2
 - Cpf: 78812057098
 - Salario bruto: R$ 4.000,00
 - Desconto da previdência: R$ 400,00
