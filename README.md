@@ -1,5 +1,7 @@
 Eu desenvolvi o site com cobertura de testes, validações e com garantia de qualidade e boa experiência para o usuário.
 
+**Cobertura de testes:** Os testes automatizados com Jest cobrem validações de dados (nome, CPF, salário, desconto e dependentes), operações CRUD (cadastrar, atualizar, buscar e excluir funcionários), tratamento de erros e prevenção de duplicidade de CPF.
+
 O site está disponível online para você poder testar
 [acessar o site](https://teste-seidor-iota.vercel.app/)
 

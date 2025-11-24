@@ -22,7 +22,6 @@ export class FuncionarioService {
     const list = this.buscarFuncionarios();
 
     list.unshift(funcionarioComId);
-    console.log(list);
 
     localStorage.setItem(this.KEY, JSON.stringify(list));
     return id;
