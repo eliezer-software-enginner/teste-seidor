@@ -64,3 +64,11 @@ http://localhost:5173/
 ```
 
 Observação: Você precisa ter o **NodeJs** instalado em seu ambiente.
+
+# Para executar os testes
+
+Para executar os testes automatizados com Jest:
+
+```bash
+npm test
+```
